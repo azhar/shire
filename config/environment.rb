@@ -12,7 +12,8 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
   config.gem "hpricot"
-  config.gem "amazon-ecs"
+  config.gem "amazon-ecs", :lib => "amazon/ecs" 
+  config.gem "fast_xs"
   #config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
     #File.directory?(lib = "#{dir}/lib") ? lib : dir
   #end
