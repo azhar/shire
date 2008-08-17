@@ -13,9 +13,9 @@ require File.join(File.dirname(__FILE__), 'boot')
 Rails::Initializer.run do |config|
   config.gem "hpricot"
   config.gem "amazon-ecs"
-  #config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
-    #File.directory?(lib = "#{dir}/lib") ? lib : dir
-  #end
+  config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
+    File.directory?(lib = "#{dir}/lib") ? lib : dir
+  end
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
