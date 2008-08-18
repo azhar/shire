@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: 
+  author: 
+  price: 
+  pubdate: 
+  asin: 
+  image_url: 
+  reviews: 
+  rating: 1
+
+two:
+  title: 
+  author: 
+  price: 
+  pubdate: 
+  asin: 
+  image_url: 
+  reviews: 
+  rating: 1

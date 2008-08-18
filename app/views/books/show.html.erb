@@ -1,0 +1,43 @@
+<p>
+  <b>Title:</b>
+  <%=h @book.title %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%=h @book.author %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%=h @book.price %>
+</p>
+
+<p>
+  <b>Pubdate:</b>
+  <%=h @book.pubdate %>
+</p>
+
+<p>
+  <b>Asin:</b>
+  <%=h @book.asin %>
+</p>
+
+<p>
+  <b>Image url:</b>
+  <%=h @book.image_url %>
+</p>
+
+<p>
+  <b>Reviews:</b>
+  <%=h @book.reviews %>
+</p>
+
+<p>
+  <b>Rating:</b>
+  <%=h @book.rating %>
+</p>
+
+
+<%= link_to 'Edit', edit_book_path(@book) %> |
+<%= link_to 'Back', books_path %>

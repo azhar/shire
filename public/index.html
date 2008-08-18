@@ -135,15 +135,21 @@
         color: #888;
         margin-bottom: 25px;
       }
-      #getting-started li h2 {
+      #instructions h2 {
         margin: 0;
-        font-weight: normal;
+        font-weight: bold;
         font-size: 18px;
         color: #333;
       }
-      #getting-started li p {
+      #instructions p {
         color: #555;
         font-size: 13px;
+      }
+      #instructions pre {
+        background: black;
+        color: #ccc;
+        padding: 0.3em 0.5em;
+        font-size: 90%;
       }
       
       
@@ -181,19 +187,6 @@
     <script type="text/javascript" src="javascripts/prototype.js"></script>
     <script type="text/javascript" src="javascripts/effects.js"></script>
     <script type="text/javascript">
-      function about() {
-        if (Element.empty('about-content')) {
-          new Ajax.Updater('about-content', 'rails/info/properties', {
-            method:     'get',
-            onFailure:  function() {Element.classNames('about-content').add('failure')},
-            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
-          });
-        } else {
-          new Effect[Element.visible('about-content') ? 
-            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
-        }
-      }
-      
       window.onload = function() {
         $('search-text').value = '';
         $('search').onsubmit = function() {
@@ -230,6 +223,7 @@
             <h3>Browse the documentation</h3>
             <ul class="links">
               <li><a href="http://api.rubyonrails.org/">Rails API</a></li>
+              <li><a href="http://heroku.com/docs/api/">Heroku API</a></li>
               <li><a href="http://stdlib.rubyonrails.org/">Ruby standard library</a></li>
               <li><a href="http://corelib.rubyonrails.org/">Ruby core</a></li>
             </ul>
@@ -240,38 +234,45 @@
       <div id="content">
         <div id="header">
           <h1>Welcome aboard</h1>
-          <h2>You&rsquo;re riding Ruby on Rails!</h2>
+          <h2>You&rsquo;re riding the Rails!</h2>
         </div>
 
-        <div id="about">
-          <h3><a href="rails/info/properties" onclick="about(); return false">About your application&rsquo;s environment</a></h3>
-          <div id="about-content" style="display: none"></div>
-        </div>
-        
         <div id="getting-started">
           <h1>Getting started</h1>
           <h2>Here&rsquo;s how to get rolling:</h2>
           
-          <ol>
-            <li>
-              <h2>Create your databases and edit <tt>config/database.yml</tt></h2>
-              <p>Rails needs to know your login and password.</p>
-            </li>
-          
-            <li>
-              <h2>Use <tt>script/generate</tt> to create your models and controllers</h2>
-              <p>To see all available options, run it without parameters.</p>
-            </li>
-            
-            <li>
-              <h2>Set up a default route and remove or rename this file</h2>
-              <p>Routes are set up in config/routes.rb.</p>
-            </li>
-          </ol>
+          <div id="instructions">
+            <h2>Use the online editor</h2>
+            <p><a id="edit_link" href="#">Edit your app</a> online</h2>, or <a id="import_link" href="#">import a tarball</a>.</p>
+          </div>
+         
+          <div id="instructions">
+            <h2>Work locally and deploy to Heroku</h2>
+            <pre>gem install heroku
+heroku clone <span id="app_name1">yourapp</span>
+cd <span id="app_name2">yourapp</span>
+[..local edits..]
+git add .
+git commit -m "local changes"
+git push</pre>
+          </div>
         </div>
       </div>
       
       <div id="footer">&nbsp;</div>
     </div>
-  </body>
+
+<script type="text/javascript">
+  var parts = location.hostname.split('.')
+  var app_name = parts[0]
+  var domain = parts.slice(1).join('.')
+
+  document.getElementById('app_name1').innerHTML = app_name
+  document.getElementById('app_name2').innerHTML = app_name
+  document.getElementById('edit_link').href = 'http://edit.' + location.hostname
+  document.getElementById('import_link').href = 'http://' + domain + '/myapps/' + app_name + '/import_export'
+</script>
+
+</body>
+
 </html>
