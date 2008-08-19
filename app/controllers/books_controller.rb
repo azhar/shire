@@ -1,4 +1,23 @@
 class BooksController < ApplicationController
+
+  def search
+    if params[:query]
+      #parse 'query' to extract search terms.
+      @titles = []
+      @authors = []
+      Amazon::Ecs.options = {:aWS_access_key_id => ['00D8NKFQ2R8W9EC0J182']}
+      res = Amazon::Ecs.item_search(params[:query], :country => :us)
+      res.items.each do |item|
+        #retrieve string value using XML path
+        item.get('asin')
+        item.get('itemattributes/title')
+        atts = item.search_and_convert('itemattributes')
+        @titles.push atts.get('title')
+        @authors.push atts.get('author')
+      end
+    end
+  end
+
   # GET /books
   # GET /books.xml
   def index

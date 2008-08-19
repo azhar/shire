@@ -1,0 +1,7 @@
+<% if @authors.empty? %>
+    <span>There were no results for your query</span><br/><br/>
+<% else %>
+    Results: <br /> 
+    Title: <%= @titles[0] %>
+    Author: <%= @authors[0]  %>
+<% end %>
