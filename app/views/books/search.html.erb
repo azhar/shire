@@ -1,7 +1,27 @@
-<% if @authors.empty? %>
+<% if !defined? @book %>
     <span>There were no results for your query</span><br/><br/>
 <% else %>
-    Results: <br /> 
-    Title: <%= @titles[0] %>
-    Author: <%= @authors[0]  %>
+    <h2>Results:</h2>
+    <strong>Title:</strong> <%= @book[:title] %> <br />
+    <strong>Author:</strong> <%= @book[:author]  %> <br />
+    <strong>Review Pages:</strong> <%= @book[:reviewpages] %>  <br />
+    <strong>Total Reviews:</strong> <%= @book[:reviewcount] %> <br />
+    <strong>Rating:</strong> <%= @book[:reviewrating] %> <br />
+    <strong>Rank:</strong> <%= @book[:salesrank] %> <br />
+    <strong>Published on:</strong> <%= @book[:pubdate] %> <br />
+    <strong>Price:</strong> <%= @book[:price] %> <br />
+    <strong>ASIN:</strong> <%= @book[:asin] %> <br />
+<% end %>
+
+<% if !defined? @debug %>
+    <span>There were no debug results for your query</span><br/><br/>
+<% else %>
+    <hr />
+    <strong>Items:</strong> <%= @debug[:items] %><br />
+    <strong>Pages:</strong> <%= @debug[:pages] %><br />
+    <hr />
+    <strong>Complete document is dumped below:</strong><br />
+    <strong>===BEGIN===<br />
+    </strong><%= h @debug[:doc] %><br />
+    <strong>===End===</strong>
 <% end %>

@@ -3,18 +3,18 @@ class BooksController < ApplicationController
   def search
     if params[:query]
       #parse 'query' to extract search terms.
-      @titles = []
-      @authors = []
       Amazon::Ecs.options = {:aWS_access_key_id => ['00D8NKFQ2R8W9EC0J182']}
-      res = Amazon::Ecs.item_search(params[:query], :country => :us)
-      res.items.each do |item|
-        #retrieve string value using XML path
-        item.get('asin')
-        item.get('itemattributes/title')
-        atts = item.search_and_convert('itemattributes')
-        @titles.push atts.get('title')
-        @authors.push atts.get('author')
-      end
+      res = Amazon::Ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
+      item = res.items.first
+      @debug = { :items => res.items().size, :pages => res.total_pages().size,
+                 :doc => item }
+      @book = { :title => item.get('title'), :author => item.get('author'),
+                :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
+                :salesrank => item.get('salesrank'),
+                :reviewpages => item.get('customerreviews/totalreviewpages'),
+                :reviewcount => item.get('customerreviews/totalreviews'),
+                :reviewrating => item.get('customerreviews/averagerating'),
+                :price => item.get('listprice/formattedprice') }
     end
   end
 
