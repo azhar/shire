@@ -11,9 +11,9 @@ RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
-  config.gem "hpricot"
-  config.gem "amazon-ecs", :lib => "amazon/ecs" 
-  config.gem "fast_xs"
+#  config.gem "hpricot"
+#  config.gem "amazon-ecs", :lib => "amazon/ecs" 
+#  config.gem "fast_xs"
   #config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
     #File.directory?(lib = "#{dir}/lib") ? lib : dir
   #end
