@@ -2,13 +2,14 @@
     <span>There were no results for your query</span><br/><br/>
 <% else %>
     <h2>Results:</h2>
-<!--
-    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/large/isbn/<%= @book[:isbn] %>" /> 
---> 
-    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/medium/isbn/<%= @book[:isbn] %>" /> 
-<!--
-    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/small/isbn/<%= @book[:isbn] %>" />
--->
+
+<%
+    ["large", "medium", "small"].each do |size|
+%>
+      <img src="http://covers.librarything.com/devkey/<%= @devkey %>/<%= size %>/isbn/<%= @book[:isbn] %>" /> 
+<%    
+    end
+%>
     <br />
     <strong>Title:</strong> <%= @book[:title] %> <br />
     <strong>Author:</strong> <%= @book[:author]  %> <br />

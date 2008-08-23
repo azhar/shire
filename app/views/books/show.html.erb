@@ -1,43 +1,29 @@
-<p>
-  <b>Title:</b>
-  <%=h @book.title %>
-</p>
+<% if !defined? @books %>
+    <span>There were no results for your query</span><br/><br/>
+<% else %>
+    <h2>Results:</h2>
 
-<p>
-  <b>Author:</b>
-  <%=h @book.author %>
-</p>
+    <table cellspacing="10">
 
-<p>
-  <b>Price:</b>
-  <%=h @book.price %>
-</p>
+<%  @books.each do |book| %>
+    <tr>
+      <td>
+    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/medium/isbn/<%= book[:isbn] %>" /> 
+    </td>
+    <td>
+    <strong>Title:</strong> <%= book[:title] %> <br />
+    <strong>Author:</strong> <%= book[:author]  %> <br />
+    <strong>Review Pages:</strong> <%= book[:reviewpages] %>  <br />
+    <strong>Total Reviews:</strong> <%= book[:reviewcount] %> <br />
+    <strong>Rating:</strong> <%= book[:reviewrating] %> <br />
+    <strong>Rank:</strong> <%= book[:salesrank] %> <br />
+    <strong>Published on:</strong> <%= book[:pubdate] %> <br />
+    <strong>Price:</strong> <%= book[:price] %> <br />
+    <strong>ISBN:</strong> <%= book[:isbn] %>
+    </td>
+    </tr>
+<% end %>
 
-<p>
-  <b>Pubdate:</b>
-  <%=h @book.pubdate %>
-</p>
+    </table>
 
-<p>
-  <b>Asin:</b>
-  <%=h @book.asin %>
-</p>
-
-<p>
-  <b>Image url:</b>
-  <%=h @book.image_url %>
-</p>
-
-<p>
-  <b>Reviews:</b>
-  <%=h @book.reviews %>
-</p>
-
-<p>
-  <b>Rating:</b>
-  <%=h @book.rating %>
-</p>
-
-
-<%= link_to 'Edit', edit_book_path(@book) %> |
-<%= link_to 'Back', books_path %>
+<% end %>
