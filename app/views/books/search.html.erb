@@ -2,6 +2,14 @@
     <span>There were no results for your query</span><br/><br/>
 <% else %>
     <h2>Results:</h2>
+<!--
+    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/large/isbn/<%= @book[:isbn] %>" /> 
+--> 
+    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/medium/isbn/<%= @book[:isbn] %>" /> 
+<!--
+    <img src="http://covers.librarything.com/devkey/<%= @devkey %>/small/isbn/<%= @book[:isbn] %>" />
+-->
+    <br />
     <strong>Title:</strong> <%= @book[:title] %> <br />
     <strong>Author:</strong> <%= @book[:author]  %> <br />
     <strong>Review Pages:</strong> <%= @book[:reviewpages] %>  <br />
@@ -10,6 +18,7 @@
     <strong>Rank:</strong> <%= @book[:salesrank] %> <br />
     <strong>Published on:</strong> <%= @book[:pubdate] %> <br />
     <strong>Price:</strong> <%= @book[:price] %> <br />
+    <strong>ISBN:</strong> <%= @book[:isbn] %> <br />
     <strong>ASIN:</strong> <%= @book[:asin] %> <br />
 <% end %>
 

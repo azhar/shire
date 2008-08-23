@@ -1,3 +1,4 @@
+require 'amazon/ecs'
 class BooksController < ApplicationController
 
   def search
@@ -10,11 +11,12 @@ class BooksController < ApplicationController
                  :doc => item }
       @book = { :title => item.get('title'), :author => item.get('author'),
                 :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
-                :salesrank => item.get('salesrank'),
+                :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
                 :reviewpages => item.get('customerreviews/totalreviewpages'),
                 :reviewcount => item.get('customerreviews/totalreviews'),
                 :reviewrating => item.get('customerreviews/averagerating'),
                 :price => item.get('listprice/formattedprice') }
+      @devkey = 'abf2540f35f09cc617430071dbeb09c4'
     end
   end
 
