@@ -7,19 +7,43 @@ class BooksController < ApplicationController
 
   def search
     if params[:query]
-      #parse 'query' to extract search terms.
       Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
       res = Amazon::Ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
-      item = res.items.first
       @debug = { :items => res.items().size, :pages => res.total_pages().size,
-                 :doc => item }
-      @book = { :title => item.get('title'), :author => item.get('author'),
-                :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
-                :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
-                :reviewpages => item.get('customerreviews/totalreviewpages'),
-                :reviewcount => item.get('customerreviews/totalreviews'),
-                :reviewrating => item.get('customerreviews/averagerating'),
-                :price => item.get('listprice/formattedprice') }
+        :doc => res.items.first }
+      set_book(res.items.first)
+    end
+    respond_to do |format|
+      format.html # search.html.erb
+      format.xml  { render :xml => @book }
+    end
+  end
+
+  def set_book(item)
+    @book = { :title => item.get('title'), :author => item.get('author'),
+      :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
+      :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
+      :reviewpages => item.get('customerreviews/totalreviewpages'),
+      :reviewcount => item.get('customerreviews/totalreviews'),
+      :reviewrating => item.get('customerreviews/averagerating'),
+      :price => item.get('listprice/formattedprice') }
+  end
+
+  def show_books
+    Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
+    res = Amazon::Ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
+    @books = res.items.collect do |item|
+      { :title => item.get('title'), :author => item.get('author'),
+        :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
+        :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
+        :reviewpages => item.get('customerreviews/totalreviewpages'),
+        :reviewcount => item.get('customerreviews/totalreviews'),
+        :reviewrating => item.get('customerreviews/averagerating'),
+        :price => item.get('listprice/formattedprice') }
+    end
+    respond_to do |format|
+      format.html # show_books.html.erb
+      format.xml  { render :xml => @book }
     end
   end
 
@@ -37,24 +61,13 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.xml
   def show
-#     @book = Book.find(params[:id])
+    @book = Book.find(params[:id])
 
-#     respond_to do |format|
-#       format.html # show.html.erb
-#       format.xml  { render :xml => @book }
-#     end
-      Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
-      res = Amazon::Ecs.item_search(params[:query], :type => 'Author', :response_group => 'Medium,Reviews')
-      @books = res.items.collect do |item|
-                { :title => item.get('title'), :author => item.get('author'),
-                  :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
-                  :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
-                  :reviewpages => item.get('customerreviews/totalreviewpages'),
-                  :reviewcount => item.get('customerreviews/totalreviews'),
-                  :reviewrating => item.get('customerreviews/averagerating'),
-                  :price => item.get('listprice/formattedprice') }
-      end
- end
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @book }
+    end
+  end
 
   # GET /books/new
   # GET /books/new.xml
@@ -70,6 +83,20 @@ class BooksController < ApplicationController
   # GET /books/1/edit
   def edit
     @book = Book.find(params[:id])
+  end
+
+  def add
+    p=params[:book]
+    @book = Book.new({:title => p[:title], :author => p[:author], :price => p[:price].to_s, :pubdate => p[:pubdate], :asin => p[:asin], :reviews => p[:reviewcount], :rating => p[:reviewrating]})
+    if @book.save
+      flash[:notice]='Book was successfully added.'
+      respond_to do |format|
+        format.html { redirect_to(show(@book[:title])) }
+        format.xml { render :xml => p.to_xml }
+      end
+    else
+      format.html { render :action => :search, :params => @book }
+    end
   end
 
   # POST /books

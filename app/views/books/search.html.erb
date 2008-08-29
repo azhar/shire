@@ -6,7 +6,7 @@
 <%
     ["large", "medium", "small"].each do |size|
 %>
-      <img src="http://covers.librarything.com/devkey/<%= @devkey %>/<%= size %>/isbn/<%= @book[:isbn] %>" /> 
+      <img src="http://covers.librarything.com/devkey/<%= @devkey %>/<%= size %>/isbn/<%= @book[:asin] %>" /> 
 <%    
     end
 %>
@@ -23,8 +23,10 @@
     <strong>ASIN:</strong> <%= @book[:asin] %> <br />
 <% end %>
 
+<%= link_to 'Add Book', add_books_path(:book => @book), :method => :post %>
+
 <% if !defined? @debug %>
-    <span>There were no debug results for your query</span><br/><br/>
+    <hr /><span>There were no debug results for your query</span><br/><br/>
 <% else %>
     <hr />
     <strong>Items:</strong> <%= @debug[:items] %><br />
