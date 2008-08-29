@@ -1,14 +1,14 @@
 require 'amazon/ecs'
 class BooksController < ApplicationController
-  before_filter :set_dev_key
+  before_filter :set_dev_keys
 
   ACCESS_ID = '00D8NKFQ2R8W9EC0J182'
   DEV_KEY = 'abf2540f35f09cc617430071dbeb09c4'
 
   def search
     if params[:query]
-      Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
-      res = Amazon::Ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
+      #Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
+      res = ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
       @debug = { :items => res.items().size, :pages => res.total_pages().size,
         :doc => res.items.first }
       set_book(res.items.first)
@@ -19,27 +19,10 @@ class BooksController < ApplicationController
     end
   end
 
-  def set_book(item)
-    @book = { :title => item.get('title'), :author => item.get('author'),
-      :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
-      :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
-      :reviewpages => item.get('customerreviews/totalreviewpages'),
-      :reviewcount => item.get('customerreviews/totalreviews'),
-      :reviewrating => item.get('customerreviews/averagerating'),
-      :price => item.get('listprice/formattedprice') }
-  end
-
   def show_books
-    Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
-    res = Amazon::Ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
+    res = ecs.item_search(params[:query], :type => 'Title', :response_group => 'Medium,Reviews')
     @books = res.items.collect do |item|
-      { :title => item.get('title'), :author => item.get('author'),
-        :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
-        :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
-        :reviewpages => item.get('customerreviews/totalreviewpages'),
-        :reviewcount => item.get('customerreviews/totalreviews'),
-        :reviewrating => item.get('customerreviews/averagerating'),
-        :price => item.get('listprice/formattedprice') }
+      set_book(item)
     end
     respond_to do |format|
       format.html # show_books.html.erb
@@ -146,8 +129,25 @@ class BooksController < ApplicationController
   end
 
   private
-  def set_dev_key
-     @devkey = DEV_KEY
+  def set_dev_keys
+    @devkey = DEV_KEY
+    @access_id = ACCESS_ID
+  end
+
+  def ecs
+    Amazon::Ecs.options = {:aWS_access_key_id => [ACCESS_ID]}
+    @ecs = Amazon::Ecs
+  end
+
+
+  def set_book(item)
+    @book = { :title => item.get('title'), :author => item.get('author'),
+      :asin => item.get('asin'), :pubdate => item.get('publicationdate'),
+      :salesrank => item.get('salesrank'), :isbn => item.get('isbn'),
+      :reviewpages => item.get('customerreviews/totalreviewpages'),
+      :reviewcount => item.get('customerreviews/totalreviews'),
+      :reviewrating => item.get('customerreviews/averagerating'),
+      :price => item.get('listprice/formattedprice') }
   end
 
 end
