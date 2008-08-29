@@ -73,12 +73,12 @@ class BooksController < ApplicationController
     @book = Book.new({:title => p[:title], :author => p[:author], :price => p[:price].to_s, :pubdate => p[:pubdate], :asin => p[:asin], :reviews => p[:reviewcount], :rating => p[:reviewrating]})
     if @book.save
       flash[:notice]='Book was successfully added.'
-      respond_to do |format|
-        format.html { redirect_to(show(@book[:title])) }
-        format.xml { render :xml => p.to_xml }
-      end
     else
-      format.html { render :action => :search, :params => @book }
+      flash[:notice]='Book was not added.'
+    end
+    respond_to do |format|
+      format.html { render :action => :search, :params => { :query => @book[:title]} }
+      format.xml { render :xml => p.to_xml }
     end
   end
 
